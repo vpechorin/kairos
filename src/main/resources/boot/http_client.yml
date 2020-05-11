@@ -1,0 +1,20 @@
+---
+namespace: "core"
+instanceName: "HttpClient_01"
+type: "net.pechorina.kairos.core.verticles.http.HttpClient"
+options:
+    - section: httpclient
+      host: www.floatrates.com
+      path: /daily/usd.json
+    - section: webclientoptions
+      connectTimeout: 8000
+      keepAlive: true
+      logActivity: false
+
+inputLanes:
+  - type: EVENT
+    name: "out_pulse"
+
+outputLanes:
+  - type: EVENT
+    name: "log_any"

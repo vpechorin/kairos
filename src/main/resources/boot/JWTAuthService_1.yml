@@ -1,0 +1,9 @@
+---
+namespace: "core"
+instanceName: "JWTAuthService_01"
+type: "net.pechorina.kairos.core.verticles.auth.JWTAuthService"
+inputLanes:
+  - type: INTERACTIVE
+    name: "new_jwt_auth_in"
+  - type: INTERACTIVE
+    name: "check_jwt_token"

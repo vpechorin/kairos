@@ -1,0 +1,20 @@
+---
+namespace: "core"
+instanceName: "StagePersister_01"
+type: "net.pechorina.kairos.core.verticles.processors.GroovyProcessor"
+options:
+  - section: main
+    transformation: |
+      def json = in.getPayloadAsJsonObject()
+      def ns = json.getString("namespace", "default")
+      def name = json.getString("instanceName", "undefined")
+      def type = json.getString("type", "generic")
+      return in.makeChild(id).setFilePath("$ns/$type/$name")
+
+worker: false
+inputLanes:
+  - type: EVENT
+    name: "persist_definition"
+outputLanes:
+  - type: EVENT
+    name: "in_new_definition"

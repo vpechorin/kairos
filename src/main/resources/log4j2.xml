@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="net.pechorina.kairos" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="io.netty.util" level="WARN"/>
+        <Logger name="io.netty.buffer" level="WARN"/>
+        <Logger name="io.vertx" level="DEBUG"/>
+        <Logger name="com.hazelcast" level="INFO"/>
+        <Logger name="com.mitchellbosecke.pebble" level="WARN"/>
+        <Root level="debug">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>

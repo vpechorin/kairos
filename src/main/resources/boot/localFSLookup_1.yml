@@ -1,0 +1,17 @@
+---
+namespace: "core"
+instanceName: "LocalFSLookup_01"
+type: "net.pechorina.kairos.core.verticles.processors.LocalFSLookup"
+options:
+  - section: fs
+    outputContentType: JSON
+    path: "./build/localfs"
+    requestMapperEx: "input.path"
+inputLanes:
+  - type: EVENT
+    name: "in_get_definition"
+  - type: INTERACTIVE
+    name: "load_definition_io"
+outputLanes:
+  - type: EVENT
+    name: "out_get_definition"

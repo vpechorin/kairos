@@ -1,0 +1,15 @@
+---
+namespace: "core"
+instanceName: "EventLogSink_01"
+type: "net.pechorina.kairos.core.verticles.sinks.EventLogSink"
+inputLanes:
+  - type: EVENT
+    name: "in_new_definition"
+  - type: EVENT
+    name: "out_shell"
+  - type: EVENT
+    name: "in_get_definition"
+  - type: EVENT
+    name: "out_get_definition"
+  - type: EVENT
+    name: "log_any"

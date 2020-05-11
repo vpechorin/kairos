@@ -1,0 +1,77 @@
+---
+namespace: "core"
+instanceName: "ApiDefinitionsHttpEndpoint_01"
+type: "net.pechorina.kairos.core.verticles.http.HttpServerSource"
+options:
+  - section: http
+    port: {{ config.port == null ? 6080: config.port }}
+    auth: true
+
+  - section: routes
+    route: "/core/api/definitions/:namespace/:type/:name"
+    method: GET
+    output: "load_definition_io"
+    requestMapperEx: "[path: \"${input?.namespace}/${input?.type}/${input?.name}\"]"
+    authorities: wheel
+    validate: False
+
+  - section: routes
+    route: "/core/api/definitions"
+    method: POST
+    consumes: "application/json"
+    output: "persist_definition"
+    authorities: wheel
+    validate: False
+
+  - section: routes
+    route: "/core/api/definitions"
+    method: GET
+    output: "get_core_stages_io"
+    authorities: wheel
+    validate: False
+
+  - section: routes
+    route: "/core/api/namespaces"
+    method: GET
+    requestMapperEx: "'.'"
+    output: "get_dircontent_io"
+    authorities: wheel
+    validate: False
+
+  - section: routes
+    route: "/core/ping"
+    output: "in_ping"
+    validate: False
+
+  - section: routes
+    route: "/core/api/auth"
+    method: POST
+    consumes: "application/json"
+    output: "new_jwt_auth_in"
+    responseMapperEx: |
+      if (input?.getStatus()?.name() == 'OK') {
+        return [token: input?.getHeader('jwt'), success: true]
+      }
+      return [message: input?.payload, success: false]
+
+    validate: False
+
+  - section: authN
+    jwtAuthServiceAddress: "core::check_jwt_token"
+    usernamePasswordServiceAddress: "core::auth_in"
+
+outputLanes:
+  - type: EVENT
+    name: "persist_definition"
+  - type: INTERACTIVE
+    name: "load_definition_io"
+  - type: EVENT
+    name: "in_ping"
+  - type: INTERACTIVE
+    name: "new_jwt_auth_in"
+  - type: INTERACTIVE
+    name: "auth_in"
+  - type: INTERACTIVE
+    name: "get_dircontent_io"
+  - type: INTERACTIVE
+    name: "get_core_stages_io"

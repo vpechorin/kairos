@@ -1,6 +1,10 @@
 buildscript {
     ext {
-        vertxVersion = "3.5.3"
+        vertxVersion = "3.9.0"
+        kotlinVersion = '1.3.71'
+        log4jVersion = '2.11.2'
+        jacksonVersion = '2.10.2'
+        groovyVersion = '3.0.2'
     }
     repositories {
         mavenLocal()
@@ -8,15 +12,19 @@ buildscript {
         jcenter()
         maven { url 'https://plugins.gradle.org/m2/' }
     }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
+    }
+
 }
 
-plugins {
-    id 'java'
-    id 'application'
-    id 'com.github.johnrengelman.shadow' version '2.0.2'
-}
+apply plugin: 'kotlin'
+apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 repositories {
+    mavenLocal()
     mavenCentral()
     jcenter()
     maven {
@@ -24,33 +32,112 @@ repositories {
     }
 }
 
-version = '0.1'
+group = 'net.pechorina.kairos'
+version = '0.0.1-SNAPSHOT'
 
-shadowJar {
-    baseName = 'kairos'
-    version = "$version"
+mainClassName = "net.pechorina.kairos.KairosApp"
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        jvmTarget = "11"
+    }
 }
-
-sourceCompatibility = '1.10'
-mainClassName = 'io.vertx.core.Launcher'
 
 dependencies {
-    compile "io.vertx:vertx-core:$vertxVersion"
-    compile "io.vertx:vertx-lang-groovy:$vertxVersion"
-    compile "io.vertx:vertx-config:$vertxVersion"
-    compile "io.vertx:vertx-config-yaml:$vertxVersion"
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.10.0'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.10.0'
-    compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.4'
-    compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.9'
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.11.1'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.2.0'
+    testRuntime("org.junit.platform:junit-platform-launcher:1.2.0")
+    testRuntime("org.junit.vintage:junit-vintage-engine:5.2.0")
+    testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.2.0'
+    testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: '5.2.0'
+    testImplementation "org.jetbrains.kotlin:kotlin-test"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
+    implementation "io.vertx:vertx-junit5:$vertxVersion"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+    implementation "org.jetbrains.kotlin:kotlin-reflect"
+
+
+    implementation group: 'org.codehaus.groovy', name: 'groovy-all', version: groovyVersion
+    implementation "io.vertx:vertx-core:$vertxVersion"
+    implementation "io.vertx:vertx-lang-kotlin:$vertxVersion"
+    implementation "io.vertx:vertx-lang-kotlin-coroutines:$vertxVersion"
+    implementation "io.vertx:vertx-config:$vertxVersion"
+    implementation "io.vertx:vertx-config-yaml:$vertxVersion"
+    implementation "io.vertx:vertx-auth-common:$vertxVersion"
+    implementation "io.vertx:vertx-auth-jwt:$vertxVersion"
+    implementation "io.vertx:vertx-web:$vertxVersion"
+    implementation "io.vertx:vertx-web-client:$vertxVersion"
+    implementation "io.vertx:vertx-hazelcast:$vertxVersion"
+    implementation "io.vertx:vertx-rx-java2:$vertxVersion"
+    implementation "io.vertx:vertx-reactive-streams:$vertxVersion"
+    implementation "io.vertx:vertx-service-factory:$vertxVersion"
+    implementation "io.vertx:vertx-http-service-factory:$vertxVersion"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion"
+    implementation group: 'com.google.guava', name: 'guava', version: '28.1-jre'
+    implementation group: 'org.apache.avro', name: 'avro', version: '1.9.2'
+    implementation group: 'org.reflections', name: 'reflections', version: '0.9.11'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.7'
+    implementation 'io.github.microutils:kotlin-logging:1.7.9'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: log4jVersion
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: log4jVersion
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: log4jVersion
+    implementation group: 'net.thisptr', name: 'jackson-jq', version: '0.0.12'
+    implementation 'org.jetbrains.xodus:xodus-openAPI:1.3.124'
+    implementation 'org.jetbrains.xodus:xodus-environment:1.3.124'
+    implementation 'io.pebbletemplates:pebble:3.1.3'
+
+
+    implementation 'net.pechorina.kairos.automat:kairos-automat:0.2.0'
+}
+
+
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
 }
 
 shadowJar {
-    classifier = 'fat'
-    manifest {
-        attributes 'Main-Verticle': 'net.pechorina.kairos.verticles.MainVerticle'
-    }
+    archiveClassifier = 'fat'
     mergeServiceFiles {
         include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
+    }
+}
+
+test {
+
+    useJUnitPlatform {
+        includeEngines 'junit-jupiter'
+    }
+
+    //systemProperty 'java.util.logging.manager', 'org.apache.logging.log4j.jul.LogManager'
+
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+        showStandardStreams = true
+    }
+
+    minHeapSize = "256m"
+    maxHeapSize = "768m"
+    testLogging.exceptionFormat "full"
+
+    ignoreFailures false
+    reports.html.enabled = true
+
+    afterSuite { desc, result ->
+        if (!desc.parent) {
+            println "\nTest result: ${result.resultType}"
+            println "Test summary: ${result.testCount} tests, " +
+                    "${result.successfulTestCount} succeeded, " +
+                    "${result.failedTestCount} failed, " +
+                    "${result.skippedTestCount} skipped"
+        }
     }
 }

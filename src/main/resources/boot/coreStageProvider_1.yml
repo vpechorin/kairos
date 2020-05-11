@@ -1,0 +1,7 @@
+---
+namespace: "core"
+instanceName: "CoreStageProvider_01"
+type: "net.pechorina.kairos.core.verticles.core.CoreStageProvider"
+inputLanes:
+  - type: INTERACTIVE
+    name: "get_core_stages_io"

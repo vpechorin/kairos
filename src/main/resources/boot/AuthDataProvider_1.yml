@@ -1,0 +1,11 @@
+---
+namespace: "core"
+instanceName: "AuthDataProvider_01"
+type: "net.pechorina.kairos.core.verticles.processors.LocalMapProcessor"
+options:
+  - section: localdata
+    localdata.block: credentials
+    admin: admin
+  - section: localdata
+    localdata.block: "user.authorities"
+    admin: wheel

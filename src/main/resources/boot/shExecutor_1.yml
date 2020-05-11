@@ -1,0 +1,16 @@
+---
+namespace: "core"
+instanceName: "ShellProcessor_01"
+type: "net.pechorina.kairos.core.verticles.processors.ShellProcessor"
+options:
+  - section: sh
+    execute: "sh"
+    cmd: "whoami"
+    workdir: "/home/victor/tmp"
+worker: true
+inputLanes:
+  - type: EVENT
+    name: "in_ping"
+outputLanes:
+  - type: EVENT
+    name: "out_shell"

@@ -1,0 +1,6 @@
+clustered: true
+port: 6080
+keystorePassword: ruvgkb8k9y96
+keyPassword: 059c44vq061d
+blacklist: []
+userStages: "./stages"

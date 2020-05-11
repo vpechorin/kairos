@@ -1,0 +1,27 @@
+{
+  "namespace": "kairos.avro",
+  "type": "record",
+  "name": "KEvent",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string"
+    },
+    {
+      "name": "timestamp",
+      "type": "long"
+    },
+    {
+      "name": "path",
+      "type": {"type": "array", "items": "string"}
+    },
+    {
+      "name": "headers",
+      "type": {"type": "map", "values": "string"}
+    },
+    {
+      "name": "body",
+      "type": "bytes"
+    }
+  ]
+}

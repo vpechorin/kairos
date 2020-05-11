@@ -1,0 +1,11 @@
+---
+namespace: "core"
+instanceName: "LocalFSSink_01"
+type: "net.pechorina.kairos.core.verticles.sinks.LocalFSSink"
+options:
+  - section: fs
+    path: "./build/localfs"
+worker: true
+inputLanes:
+  - type: EVENT
+    name: "in_new_definition"

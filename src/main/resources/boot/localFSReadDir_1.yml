@@ -1,0 +1,15 @@
+---
+namespace: "core"
+instanceName: "LocalFSReadDir_01"
+type: "net.pechorina.kairos.core.verticles.processors.LocalFSReadDir"
+options:
+  - section: fs
+    path: "./build/localfs"
+inputLanes:
+  - type: EVENT
+    name: "in_get_dircontent"
+  - type: INTERACTIVE
+    name: "get_dircontent_io"
+outputLanes:
+  - type: EVENT
+    name: "out_dircontent"

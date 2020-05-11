@@ -1,0 +1,15 @@
+---
+namespace: "core"
+instanceName: "RequestResponseJoinProcessor_01"
+type: "net.pechorina.kairos.core.verticles.processors.RequestResponseJoinProcessor"
+options:
+  - section: join
+    timeout: 1000
+inputLanes:
+  - type: EVENT
+    name: "out_get_definition"
+  - type: INTERACTIVE
+    name: "get_definition_io"
+outputLanes:
+  - type: EVENT
+    name: "in_get_definition"
